@@ -36,16 +36,16 @@ This project implements an optimized image processing system that demonstrates p
 
 ### 2. Setup System 
 Run these commands to update the system and install the python:
-- **sudo apt update**
-- **sudo apt install python-is-python3 python3-pip unzip git -y**
+- run `sudo apt update`
+- run `sudo apt install python-is-python3 python3-pip unzip git -y`
 
 ### 3. Clone Repository & Install Dependencies
-- git clone https://github.com/AndrewT02/CST435-Assignment-2
-- cd CST435-Assignment-2
-- python -m pip install -r requirements.txt
+- run `git clone https://github.com/AndrewT02/CST435-Assignment-2`
+- run `cd CST435-Assignment-2`
+- run `python -m pip install -r requirements.txt`
 
 ### 4. Download Dataset
-- **python dataset.py**
+- run `python dataset.py`
 - Important: Look at the output of this command. It will print a directory path where the data was saved. Copy this path.
 - Update main.py with the new path:
   - nano main.py
@@ -55,11 +55,10 @@ Run these commands to update the system and install the python:
     - Save & Exit: Press CTRL+O, Enter, then CTRL+X.   
 
 ### 5. Run the Application
-- python main.py
+- run `python main.py`
 
 ### 6. Download Results
-- readlink -f performance_metrics.json
-- Click the Gear Icon (Settings) in the top-right of the SSH window.
+- run `readlink -f performance_metrics.json`
 - Select Download file.
 - Paste the path you just copied.
 - Click Download.
