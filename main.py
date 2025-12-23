@@ -39,7 +39,7 @@ OUTPUT_DIR = "processed_images"
 JSON_FILENAME = "performance_metrics.json"
 
 # Number of images to process (create manageable subset)
-MAX_IMAGES = 200
+MAX_IMAGES = 2000
 
 # Filter mode: 'grayscale', 'blur', 'sobel', 'sharpen', 'brightness', or 'all'
 CHOSEN_FILTER = 'all'
