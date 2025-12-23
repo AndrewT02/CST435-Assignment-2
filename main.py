@@ -30,7 +30,7 @@ import worker
 # CONFIGURATION
 # =============================================================================
 # Path to the Food-101 dataset (downloaded from Kaggle)
-SOURCE_DIR = r"C:\Users\User\.cache\kagglehub\datasets\dansbecker\food-101\versions\1"
+SOURCE_DIR = "C:/Users/User/.cache/kagglehub/datasets/dansbecker/food-101/versions/1" # Change path
 
 # Directory where processed images will be saved
 OUTPUT_DIR = "processed_images"
