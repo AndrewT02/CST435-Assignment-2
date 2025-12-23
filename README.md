@@ -28,28 +28,38 @@ This project implements an optimized image processing system that demonstrates p
 
 ## Running in GCP
 
-### Steps in GCP 
-- VM must have at least 8 cores and sufficient memory
-- Boot  Disk: Ubuntu 22.04 LTS X86/64
-- Size: 128Gb
-- Once created, open SSH
+### 1. Create the VM Instance
+- Machine Type: e2-standard-8 (or any instance with 8+ vCPUs).
+- Boot Disk: Ubuntu 22.04 LTS x86/64.
+- Size: 128 GB.
+- Access: Once running, click SSH to open the terminal.
 
-### Running python code 
-- Run the following code 
-  - sudo apt update
-  - sudo apt install python3-pip unzip -y
-- Upload all related files:
-  -   filters.py
-  -   main.py
-  -   utils.py
-  -   worker.py
-  -   dataset.py
-  -   requirements.txt
-- Once uploaded, run pip install -r requirements.txt
-- Then run python dataset.py
-- The directory of where the dataset is save should be printed.
-- Copy the directory, run nano main.py then replace the directory with the old one.
-- Once completed, press CTRL+O then press "Enter" then CRTL+X
-- Once completed, run python main.py
-- Then run ls performance_metrics.json
-- Copy the directory location and click "Download" and paste the directory in to download the json file.
+### 2. Setup System 
+Run these commands to update the system and install the python:
+- **sudo apt update**
+- **sudo apt install python-is-python3 python3-pip unzip git -y**
+
+### 3. Clone Repository & Install Dependencies
+- git clone https://github.com/AndrewT02/CST435-Assignment-2
+- cd CST435-Assignment-2
+- python -m pip install -r requirements.txt
+
+### 4. Download Dataset
+- **python dataset.py**
+- Important: Look at the output of this command. It will print a directory path where the data was saved. Copy this path.
+- Update main.py with the new path:
+  - nano main.py
+    - Use the arrow keys to find the line: SOURCE_DIR = "..."
+    - Delete the existing path inside the quotes.
+    - Paste the path you copied from step 1.
+    - Save & Exit: Press CTRL+O, Enter, then CTRL+X.   
+
+### 5. Run the Application
+- python main.py
+
+### 6. Download Results
+- readlink -f performance_metrics.json
+- Click the Gear Icon (Settings) in the top-right of the SSH window.
+- Select Download file.
+- Paste the path you just copied.
+- Click Download.
