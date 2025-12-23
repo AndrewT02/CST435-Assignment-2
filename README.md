@@ -1,4 +1,4 @@
-# Parallel Image Processing System (Optimized Version)
+# Parallel Image Processing System
 
 A high-performance parallel image processing pipeline that applies multiple filters to images from the Food-101 dataset using Python's parallel computing paradigms with **optimized vectorized operations**.
 
