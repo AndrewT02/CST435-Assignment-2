@@ -48,7 +48,7 @@ Run these commands to update the system and install the python:
 - run `python dataset.py`
 - Important: Look at the output of this command. It will print a directory path where the data was saved. Copy this path.
 - Update main.py with the new path:
-  - nano main.py
+  - run `nano main.py`
     - Use the arrow keys to find the line: SOURCE_DIR = "..."
     - Delete the existing path inside the quotes.
     - Paste the path you copied from step 1.
