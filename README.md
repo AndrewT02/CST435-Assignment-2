@@ -49,7 +49,7 @@ Run these commands to update the system and install the python:
 - Important: Look at the output of this command. It will print a directory path where the data was saved. Copy this path.
 - Update main.py with the new path:
   - run `nano main.py`
-    - Use the arrow keys to find the line: SOURCE_DIR = "..."
+    - Use the arrow keys to find the line: `SOURCE_DIR = "..."`
     - Delete the existing path inside the quotes.
     - Paste the path you copied from step 1.
     - Save & Exit: Press CTRL+O, Enter, then CTRL+X.   
