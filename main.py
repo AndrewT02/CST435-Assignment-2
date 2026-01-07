@@ -2,9 +2,10 @@
 main.py - Parallel Image Processing Benchmark
 
 This module is the main entry point for the parallel image processing system.
-It benchmarks two Python parallel computing paradigms:
+It benchmarks three Python parallel computing paradigms:
 1. multiprocessing.Pool - Low-level process pool implementation
-2. concurrent.futures.ProcessPoolExecutor - High-level executor-based parallelism
+2. concurrent.futures.ProcessPoolExecutor - High-level executor-based parallelism (processes)
+3. concurrent.futures.ThreadPoolExecutor - High-level executor-based parallelism (threads)
 
 The program processes images with configurable filters and measures:
 - Execution time
@@ -39,7 +40,7 @@ OUTPUT_DIR = "processed_images"
 JSON_FILENAME = "performance_metrics.json"
 
 # Number of images to process (create manageable subset)
-MAX_IMAGES = 2000
+MAX_IMAGES = 4000
 
 # Filter mode: 'grayscale', 'blur', 'sobel', 'sharpen', 'brightness', or 'all'
 CHOSEN_FILTER = 'all'
@@ -95,12 +96,45 @@ def run_futures(tasks, num_cores):
     Returns:
         float: Execution time in seconds
     """
-    print(f"   [Concurrent.Futures] Cores: {num_cores} | Filter: {CHOSEN_FILTER}")
+    print(f"   [ProcessPoolExecutor] Cores: {num_cores} | Filter: {CHOSEN_FILTER}")
     start = time.time()
     
     # ProcessPoolExecutor uses separate processes (not threads)
     # This is important for CPU-bound tasks like image processing
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_cores) as executor:
+        # executor.map() returns an iterator; list() forces completion
+        list(executor.map(worker.process_image_task, tasks))
+        
+    duration = time.time() - start
+    print(f"   -> Time: {duration:.4f}s")
+    return duration
+
+
+# =============================================================================
+# PARALLEL PARADIGM 3: concurrent.futures.ThreadPoolExecutor
+# =============================================================================
+def run_threading(tasks, num_cores):
+    """
+    Execute image processing using concurrent.futures.ThreadPoolExecutor.
+    
+    This paradigm uses threads instead of processes. Due to Python's GIL
+    (Global Interpreter Lock), threads cannot achieve true parallelism for
+    CPU-bound tasks. However, this implementation is included for comparison
+    to demonstrate the GIL's impact on performance.
+    
+    Args:
+        tasks: List of task tuples (input_path, output_path, filter_mode)
+        num_cores: Number of worker threads (max_workers)
+        
+    Returns:
+        float: Execution time in seconds
+    """
+    print(f"   [ThreadPoolExecutor] Threads: {num_cores} | Filter: {CHOSEN_FILTER}")
+    start = time.time()
+    
+    # ThreadPoolExecutor uses threads (subject to GIL)
+    # For CPU-bound tasks, this will NOT achieve true parallelism
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_cores) as executor:
         # executor.map() returns an iterator; list() forces completion
         list(executor.map(worker.process_image_task, tasks))
         
@@ -125,7 +159,7 @@ if __name__ == "__main__":
         # 2. Define Core Configurations to Test
         # We MUST include 1 core to calculate Speedup/Efficiency
         max_cores = os.cpu_count() or 4
-        core_configs = [1, 2, 4, 8, max_cores]
+        core_configs = [1, 2, 4, 8]#, max_cores]
         unique_cores = sorted(list(set(core_configs)))
         
         print(f"Processing {len(raw_tasks)} images with ALL 5 filters.")
@@ -141,10 +175,13 @@ if __name__ == "__main__":
             # Run Paradigm 1: multiprocessing
             mp_time = run_multiprocessing(tasks_with_filter, cores)
             
-            # Run Paradigm 2: concurrent.futures
+            # Run Paradigm 2: concurrent.futures ProcessPoolExecutor
             cf_time = run_futures(tasks_with_filter, cores)
             
-            raw_results[cores] = {'mp': mp_time, 'cf': cf_time}
+            # Run Paradigm 3: concurrent.futures ThreadPoolExecutor
+            th_time = run_threading(tasks_with_filter, cores)
+            
+            raw_results[cores] = {'mp': mp_time, 'cf': cf_time, 'th': th_time}
 
         # 4. Calculate Performance Metrics and Build JSON Output
         json_output = {
@@ -159,13 +196,14 @@ if __name__ == "__main__":
         # Get baseline times (single-core execution)
         base_time_mp = raw_results[1]['mp']
         base_time_cf = raw_results[1]['cf']
+        base_time_th = raw_results[1]['th']
 
         # Print performance report header
-        print("\n" + "="*90)
-        print(f"{'PERFORMANCE ANALYSIS REPORT':^90}")
-        print("="*90)
-        print(f"{'Cores':<6} | {'Paradigm':<15} | {'Time (s)':<10} | {'Speedup':<8} | {'Efficiency':<10} | {'Throughput (img/s)':<18}")
-        print("-" * 90)
+        print("\n" + "="*100)
+        print(f"{'PERFORMANCE ANALYSIS REPORT':^100}")
+        print("="*100)
+        print(f"{'Cores':<6} | {'Paradigm':<20} | {'Time (s)':<10} | {'Speedup':<8} | {'Efficiency':<10} | {'Throughput (img/s)':<18}")
+        print("-" * 100)
 
         for cores in unique_cores:
             # Prepare dictionary for this core count
@@ -185,24 +223,40 @@ if __name__ == "__main__":
                 "throughput_imgs_per_sec": throughput_mp
             }
             
-            print(f"{cores:<6} | {'Multiprocessing':<15} | {t_mp:<10.4f} | {speedup_mp:<8.2f} | {eff_mp:<10.1f}% | {throughput_mp:<18.2f}")
+            print(f"{cores:<6} | {'Multiprocessing.Pool':<20} | {t_mp:<10.4f} | {speedup_mp:<8.2f} | {eff_mp:<10.1f}% | {throughput_mp:<18.2f}")
 
-            # --- Concurrent Futures Metrics ---
+            # --- ProcessPoolExecutor Metrics ---
             t_cf = raw_results[cores]['cf']
             speedup_cf = base_time_cf / t_cf
             eff_cf = (speedup_cf / cores) * 100
             throughput_cf = len(raw_tasks) / t_cf
 
             # Save to JSON structure
-            json_output["results"][cores]["concurrent_futures"] = {
+            json_output["results"][cores]["process_pool_executor"] = {
                 "time_seconds": t_cf,
                 "speedup": speedup_cf,
                 "efficiency_percent": eff_cf,
                 "throughput_imgs_per_sec": throughput_cf
             }
             
-            print(f"{cores:<6} | {'Conc. Futures':<15} | {t_cf:<10.4f} | {speedup_cf:<8.2f} | {eff_cf:<10.1f}% | {throughput_cf:<18.2f}")
-            print("-" * 90)
+            print(f"{cores:<6} | {'ProcessPoolExecutor':<20} | {t_cf:<10.4f} | {speedup_cf:<8.2f} | {eff_cf:<10.1f}% | {throughput_cf:<18.2f}")
+
+            # --- ThreadPoolExecutor Metrics ---
+            t_th = raw_results[cores]['th']
+            speedup_th = base_time_th / t_th
+            eff_th = (speedup_th / cores) * 100
+            throughput_th = len(raw_tasks) / t_th
+
+            # Save to JSON structure
+            json_output["results"][cores]["thread_pool_executor"] = {
+                "time_seconds": t_th,
+                "speedup": speedup_th,
+                "efficiency_percent": eff_th,
+                "throughput_imgs_per_sec": throughput_th
+            }
+            
+            print(f"{cores:<6} | {'ThreadPoolExecutor':<20} | {t_th:<10.4f} | {speedup_th:<8.2f} | {eff_th:<10.1f}% | {throughput_th:<18.2f}")
+            print("-" * 100)
 
         # 5. Save Full Data to JSON File
         try:
