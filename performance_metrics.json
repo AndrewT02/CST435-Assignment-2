@@ -1,0 +1,89 @@
+{
+    "metadata": {
+        "total_images": 4000,
+        "filter_mode": "all",
+        "max_physical_cores": 16
+    },
+    "results": {
+        "1": {
+            "multiprocessing": {
+                "time_seconds": 82.82316255569458,
+                "speedup": 1.0,
+                "efficiency_percent": 100.0,
+                "throughput_imgs_per_sec": 48.29566846484754
+            },
+            "process_pool_executor": {
+                "time_seconds": 79.73174571990967,
+                "speedup": 1.0,
+                "efficiency_percent": 100.0,
+                "throughput_imgs_per_sec": 50.168223006826345
+            },
+            "thread_pool_executor": {
+                "time_seconds": 77.63684225082397,
+                "speedup": 1.0,
+                "efficiency_percent": 100.0,
+                "throughput_imgs_per_sec": 51.52193061996345
+            }
+        },
+        "2": {
+            "multiprocessing": {
+                "time_seconds": 40.02643895149231,
+                "speedup": 2.069211369416781,
+                "efficiency_percent": 103.46056847083904,
+                "throughput_imgs_per_sec": 99.933946281046
+            },
+            "process_pool_executor": {
+                "time_seconds": 40.48903965950012,
+                "speedup": 1.9692180004867528,
+                "efficiency_percent": 98.46090002433763,
+                "throughput_imgs_per_sec": 98.79216779747608
+            },
+            "thread_pool_executor": {
+                "time_seconds": 40.417149782180786,
+                "speedup": 1.9208885997461578,
+                "efficiency_percent": 96.0444299873079,
+                "throughput_imgs_per_sec": 98.96788916480028
+            }
+        },
+        "4": {
+            "multiprocessing": {
+                "time_seconds": 24.953969955444336,
+                "speedup": 3.31903752002493,
+                "efficiency_percent": 82.97593800062324,
+                "throughput_imgs_per_sec": 160.29513568951378
+            },
+            "process_pool_executor": {
+                "time_seconds": 24.347769260406494,
+                "speedup": 3.2747043421988846,
+                "efficiency_percent": 81.86760855497212,
+                "throughput_imgs_per_sec": 164.2860977208562
+            },
+            "thread_pool_executor": {
+                "time_seconds": 25.66239356994629,
+                "speedup": 3.0253157032766396,
+                "efficiency_percent": 75.632892581916,
+                "throughput_imgs_per_sec": 155.87010576770496
+            }
+        },
+        "8": {
+            "multiprocessing": {
+                "time_seconds": 18.04007339477539,
+                "speedup": 4.591065720369026,
+                "efficiency_percent": 57.388321504612826,
+                "throughput_imgs_per_sec": 221.72858793126892
+            },
+            "process_pool_executor": {
+                "time_seconds": 18.489631175994873,
+                "speedup": 4.31224100475436,
+                "efficiency_percent": 53.9030125594295,
+                "throughput_imgs_per_sec": 216.33746838569763
+            },
+            "thread_pool_executor": {
+                "time_seconds": 20.92895483970642,
+                "speedup": 3.7095422511749763,
+                "efficiency_percent": 46.369278139687204,
+                "throughput_imgs_per_sec": 191.12277849686018
+            }
+        }
+    }
+}

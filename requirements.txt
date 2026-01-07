@@ -1,6 +1,18 @@
 # Parallel Image Processing System - Dependencies
 #
+# Complete list of all libraries used across: main.py, filters.py, worker.py, utils.py
+#
+# EXTERNAL LIBRARIES (require installation):
 # Install with: pip install -r requirements.txt
 
+# Image processing library (provides PIL and ImageFilter modules)
+# Used in: filters.py, worker.py
 Pillow>=9.0.0
+
+# Numerical computing library for vectorized operations
+# Used in: filters.py (grayscale conversion, Sobel edge detection)
 numpy>=1.21.0
+
+# Kaggle dataset download utility
+# Used for downloading Food-101 dataset
+kagglehub>=0.2.0
