@@ -7,7 +7,8 @@ A high-performance parallel image processing pipeline that applies multiple filt
 This project implements an optimized image processing system that demonstrates parallel computing concepts by applying five different filters to a collection of images. The implementation compares two Python parallel paradigms:
 
 1. **multiprocessing.Pool** - Low-level process pool implementation
-2. **concurrent.futures.ProcessPoolExecutor** - High-level executor-based parallelism
+2. **concurrent.futures.ProcessPoolExecutor** - High-level executor-based parallelism (prcocesses)
+3. **concurrent.futures.ThreadPoolExecutor** - High-level executor-based parallelism (threads)
 
 ### ✨ Key Optimizations
 
